@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYRRITH - The Silken Moth of the Forgotten Web</title>
+    <style>
+        /* Base Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a2a;
+            color: #d0d0ff;
+            font-family: "MS Gothic", "Lucida Console", Monaco, monospace;
+            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH5gMFABcuVeXYtQAAABNJREFUOMNj+P//P8PgAUaPgVEwZAEAIe8FryJKPK8AAAAASUVORK5CYII='), auto;
+            overflow-x: hidden;
+            font-size: 14px;
+            line-height: 1.4;
+            height: 100%;
+            scrollbar-color: #00a0c0 #000040;
+            scrollbar-width: thin;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000040;
+            border: 1px solid #004080;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00a0c0;
+            border: 1px solid #00f0ff;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><path d="M20,100 Q50,50 100,80 Q150,110 180,100 Q150,150 100,120 Q50,90 20,100 Z" fill="none" stroke="rgba(120,160,255,0.1)" stroke-width="1"/></svg>');
+            background-size: 200px 200px;
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Main Layout */
+        .container {
+            display: flex;
+            margin: 20px auto;
+            max-width: 960px;
+            min-height: calc(100vh - 40px);
+            position: relative;
+            border: 1px solid #364f8a;
+            background-color: rgba(10, 10, 50, 0.85);
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
+        }
+
+        /* Header Styling */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: linear-gradient(to bottom, #000030, #000060);
+            border-bottom: 1px solid #4060a0;
+            box-shadow: 0 2px 10px rgba(0, 150, 255, 0.3);
+            position: relative;
+        }
+
+        .header h1 {
+            color: #c0c0ff;
+            text-shadow: 0 0 5px #00a0ff, 0 0 10px #0060ff;
+            font-family: "Times New Roman", serif;
+            font-size: 24px;
+            margin: 0;
+            padding: 5px 0;
+            letter-spacing: 2px;
+        }
+
+        .header::before, .header::after {
+            content: "*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*";
+            display: block;
+            color: #80a0ff;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 180px;
+            border-right: 1px solid #364f8a;
+            background: linear-gradient(to right, #000030, #00103a);
+            padding: 15px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-title {
+            text-align: center;
+            font-family: "Times New Roman", serif;
+            color: #a0a0ff;
+            text-shadow: 0 0 3px #0080ff;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px dotted #4060a0;
+            width: 100%;
+        }
+
+        .nav-orbs {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 15px;
+        }
+
+        .nav-orb {
+            width: 150px;
+            height: 36px;
+            position: relative;
+            margin: 5px 0;
+            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH5gMFABgntYgI/QAAABNJREFUOMNj+P//P8PgAUaPgVEwZAEAIe8FryJKPK8AAAAASUVORK5CYII='), auto;
+            text-align: center;
+            perspective: 400px;
+        }
+
+        .nav-orb-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0, 40, 100, 0.5), rgba(0, 80, 150, 0.5));
+            border: 1px solid #4080c0;
+            border-radius: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 150, 255, 0.3), inset 0 0 10px rgba(0, 100, 255, 0.2);
+            animation: pulse 3s infinite alternate;
+        }
+
+        .nav-orb:nth-child(2n) .nav-orb-inner {
+            animation-delay: 0.5s;
+        }
+
+        .nav-orb:nth-child(3n) .nav-orb-inner {
+            animation-delay: 1s;
+        }
+
+        .nav-orb:hover .nav-orb-inner {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.6), inset 0 0 20px rgba(0, 150, 255, 0.4);
+        }
+
+        .nav-orb a {
+            color: #d0d0ff;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 3px #0080ff;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            padding: 8px 0;
+        }
+
+        .nav-orb a::before {
+            content: "«";
+            margin-right: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-orb a::after {
+            content: "»";
+            margin-left: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-orb:hover a::before,
+        .nav-orb:hover a::after {
+            opacity: 1;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 5px rgba(0, 150, 255, 0.3), inset 0 0 10px rgba(0, 100, 255, 0.2);
+            }
+            100% {
+                box-shadow: 0 0 8px rgba(0, 180, 255, 0.5), inset 0 0 15px rgba(0, 130, 255, 0.4);
+            }
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .blog-entry {
+            background: rgba(0, 20, 60, 0.7);
+            border: 1px solid #364f8a;
+            margin-bottom: 20px;
+            padding: 15px;
+            box-shadow: 0 0 8px rgba(0, 100, 200, 0.2);
+            position: relative;
+        }
+
+        .blog-entry-header {
+            border-bottom: 1px dotted #4080c0;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            color: #a0c0ff;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .blog-entry-header::before {
+            content: "°º¤ø,¸¸,ø¤º°`°º¤ø,¸";
+            font-size: 12px;
+            color: #60a0e0;
+            margin-right: 10px;
+        }
+
+        .blog-entry-header::after {
+            content: "¸,ø¤º°`°º¤ø,¸¸,ø¤º°";
+            font-size: 12px;
+            color: #60a0e0;
+            margin-left: 10px;
+            flex: 1;
+            text-align: right;
+        }
+
+        .blog-entry-date {
+            font-size: 12px;
+            color: #80a0c0;
+            text-align: right;
+            margin-top: -12px;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .blog-entry-content {
+            line-height: 1.6;
+        }
+
+        .blog-entry-content p {
+            margin-bottom: 10px;
+        }
+
+        .blog-entry-content::after {
+            content: "";
+            display: block;
+            width: 80%;
+            margin: 15px auto 5px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #4080c0, transparent);
+        }
+
+        /* Scrolling Text */
+        .scrolling-text {
+            height: 20px;
+            overflow: hidden;
+            color: #80c0ff;
+            font-size: 12px;
+            position: relative;
+            background-color: rgba(0, 20, 40, 0.5);
+            border: 1px solid #2060a0;
+            margin: 10px 0 15px;
+            padding: 2px;
+        }
+
+        .scrolling-text-content {
+            position: absolute;
+            white-space: nowrap;
+            animation: scroll-left 30s linear infinite;
+        }
+
+        @keyframes scroll-left {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Pixel GIF Icons */
+        .pixel-icons {
+            position: absolute;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .pixel-icon {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 1;
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .spinning {
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Firefly */
+        .firefly {
+            background-image: url('data:image/gif;base64,R0lGODlhEAAQAMQAAF5eXrGxsYODg9PT07KysqKiotzc3JeXl29vb5+fn4CAgHBwcI+Pj6+vr8TExGVlZVdXV3Nzc8zMzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAAQABAAAAVWICCOZGmeaKqubOuqJhwlQizPJEATG4xgEoCQJJmgIAwYBwMBQXgYEJKFRJFgQByGBeMheEgsDgYGw0E4UBiPiQWEkXhkFI8IZCKxoBgkFAkKGCIAIQA7');
+        }
+
+        /* Moon */
+        .moon {
+            background-image: url('data:image/gif;base64,R0lGODlhEAAQAMZVAPb29ra2tsbGxvDw8KKiov39/YqKiqysrMrKypqamvT09PX19fn5+bq6uoCAgJ6ent3d3dLS0sjIyNXV1e3t7enp6erq6uHh4evr68DAwMzMzLy8vISEhLi4uL6+vsTExMLCwtfX19nZ2b+/v56envj4+KSkpIyMjJSUlImJidTU1NbW1tDQ0NDQ0MfHx66ursLCwvr6+o6OjpCQkJOTk4iIiLCwsKampujo6IKCgsDAwJiYmJKSksTExPLy8qqqqrS0tLa2toaGhri4uKioqH5+fr6+vvv7+wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAFUALAAAAAAQABAAAAeegFWCg4SFhoeIiYJSRYqCTk5KiVRLPY9VTk5BQDlNRJdVQEBAOTo7Pz9FVUNTSUA6PYWhPUdSQT87NjU2PT9BolU/OT47NDQ1NjQ7O0E+VY+grq+uhEA6qqwyMTEzMoNUT1A+j1U9PTU2NDEvLzKDVE1PT1JVkDMuLCwuL4YnTU1DRFScYMGiBowaQALpcNGihQQIiYRIHFTFUYIEGjQoSOgoBQA7');
+        }
+
+        /* Spellbook */
+        .spellbook {
+            background-image: url('data:image/gif;base64,R0lGODlhEAAQAMZUAP/////w0P/jkP/44f/km//z2P/wz//99//rt//87//z1//kmf/mof/yyf/0b//77P/1b//xdP/89P/0aP/+9v/tsv/89f/wx//zwf/65//2cv/40v/1a//ws//uzP/tcv/2dP/32P/43f/3eP/2c//1av/31//3df/1bf/87f/zwP/1bP/ywP/1bf/++P/1a//2c//2cv/xb//1bP/0av/0af/0a//1bP/0a//1bP/1bP/1bf/0aP/0af/1bP/ywP/1a//1a//zgP/0av/0af/1bP/zc//0aP/1a//1bP/zgP/ywP/1a//0af/1bP/zgP/1bP/ywP/1a//ywP/0af/0av/xdP/ywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAFQALAAAAAAQABAAAAeUgFSCg4SFhoeIiVNRiI1UU0GNjo5SgpGRUlCCi5ROkIIKlE2TKUBNClRLSiQiIiVEUzIALI8oIh4bFQ8JD0YxAAN9gikiFxhOTyIjKTMCM3uOqk1KQI8sQkNCQYOvUw0MDAkDCAUHBlI4AgU+hMSNTogrNzZUIUwwMUtUUqICU+bAiRQpWJCI0uRHIiIHkOi4oeAHxEfIEgUCADs=');
+        }
+
+        /* Hidden Glyph */
+        .hidden-glyph {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: transparent;
+            cursor: pointer;
+            z-index: 3;
+            opacity: 0.2;
+        }
+
+        .hidden-glyph:hover {
+            opacity: 0.5;
+        }
+
+        .hidden-glyph::after {
+            content: "⎊";
+            position: absolute;
+            color: #00a0ff;
+            font-size: 20px;
+            text-shadow: 0 0 5px #0080ff;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .hidden-glyph:hover::after {
+            opacity: 1;
+        }
+
+        /* Lost Page Modal */
+        .lost-page-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 30, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+        }
+
+        .lost-page-content {
+            background-color: #000030;
+            border: 1px solid #4080c0;
+            width: 80%;
+            max-width: 700px;
+            height: 80%;
+            overflow: auto;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 150, 255, 0.5);
+            font-family: "Courier New", monospace;
+            animation: assemble 2s;
+        }
+
+        @keyframes assemble {
+            0% { opacity: 0; transform: scale(0.7); filter: blur(10px); }
+            50% { opacity: 0.5; transform: scale(0.9); filter: blur(5px); }
+            100% { opacity: 1; transform: scale(1); filter: blur(0); }
+        }
+
+        .lost-page-header {
+            text-align: center;
+            color: #a0c0ff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px #0060ff;
+            font-size: 20px;
+            border-bottom: 1px solid #3060a0;
+            padding-bottom: 10px;
+        }
+
+        .lost-page-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #80a0e0;
+            cursor: pointer;
+            font-size: 16px;
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        .lost-page-close:hover {
+            color: #c0d0ff;
+            text-shadow: 0 0 5px #0080ff;
+        }
+
+        .lost-page-body {
+            line-height: 1.6;
+            color: #a0b0e0;
+            text-shadow: 0 0 2px #0040a0;
+            font-size: 14px;
+        }
+
+        .lost-page-body pre {
+            background-color: #000020;
+            border: 1px solid #2040a0;
+            padding: 10px;
+            overflow-x: auto;
+            color: #80a0e0;
+            margin: 10px 0;
+        }
+
+        .lost-page-footer {
+            font-style: italic;
+            color: #6080c0;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 20px;
+            border-top: 1px dotted #3060a0;
+            padding-top: 10px;
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(0, 160, 255, 0.4);
+            transform: scale(0);
+            animation: ripple 1s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Cursor Flicker Effect */
+        @keyframes cursor-flicker {
+            0% { cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH5gMFABcuVeXYtQAAABNJREFUOMNj+P//P8PgAUaPgVEwZAEAIe8FryJKPK8AAAAASUVORK5CYII='), auto; }
+            49% { cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH5gMFABcuVeXYtQAAABNJREFUOMNj+P//P8PgAUaPgVEwZAEAIe8FryJKPK8AAAAASUVORK5CYII='), auto; }
+            50% { cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH5gMFABgntYgI/QAAABNJREFUOMNj+P//P8PgAUaPgVEwZAEAIe8FryJKPK8AAAAASUVORK5CYII='), auto; }
+            51% { cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH5gMFABcuVeXYtQAAABNJREFUOMNj+P//P8PgAUaPgVEwZAEAIe8FryJKPK8AAAAASUVORK5CYII='), auto; }
+            100% { cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH5gMFABcuVeXYtQAAABNJREFUOMNj+P//P8PgAUaPgVEwZAEAIe8FryJKPK8AAAAASUVORK5CYII='), auto; }
+        }
+
+        /* Footer Styling */
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #6080c0;
+            padding: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #304080;
+        }
+
+        .footer::before, .footer::after {
+            content: "· · · · · · · · · · · · · · ·";
+            display: block;
+            margin: 5px 0;
+        }
+
+        /* Web 1.0 Elements */
+        .visitor-counter {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 12px;
+            color: #80a0e0;
+        }
+
+        .counter-digits {
+            display: inline-block;
+            background-color: #000040;
+            color: #00ff80;
+            border: 1px solid #4060c0;
+            padding: 2px 4px;
+            margin: 0 1px;
+        }
+
+        .webring {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+
+        .webring a {
+            color: #80a0ff;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        .webring a:hover {
+            text-decoration: underline;
+            color: #c0d0ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="nav-title">✧ Lyrrith's Archives ✧</div>
+            
+            <div class="nav-orbs">
+                <div class="nav-orb">
+                    <div class="nav-orb-inner">
+                        <a href="#home">Home Shrine</a>
+                    </div>
+                </div>
+                <div class="nav-orb">
+                    <div class="nav-orb-inner">
+                        <a href="#forgotten-lore">Forgotten Lore</a>
+                    </div>
+                </div>
+                <div class="nav-orb">
+                    <div class="nav-orb-inner">
+                        <a href="#relics">Digital Relics</a>
+                    </div>
+                </div>
+                <div class="nav-orb">
+                    <div class="nav-orb-inner">
+                        <a href="#rituals">Web Rituals</a>
+                    </div>
+                </div>
+                <div class="nav-orb">
+                    <div class="nav-orb-inner">
+                        <a href="#echoes">Echoes Chamber</a>
+                    </div>
+                </div>
+                <div class="nav-orb">
+                    <div class="nav-orb-inner">
+                        <a href="#visions">Silken Visions</a>
+                    </div>
+                </div>
+                <div class="nav-orb">
+                    <div class="nav-orb-inner">
+                        <a href="#sigils">Sacred Sigils</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="visitor-counter">
+                <div>Visitors to the shrine:</div>
+                <div>
+                    <span class="counter-digits">1</span>
+                    <span class="counter-digits">3</span>
+                    <span class="counter-digits">3</span>
+                    <span class="counter-digits">7</span>
+                </div>
+            </div>
+            
+            <div class="webring">
+                <a href="#">« Prev Shrine</a>
+                <a href="#">Webring</a>
+                <a href="#">Next Shrine »</a>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="content-area">
+            <div class="header">
+                <h1>LYRRITH, THE SILKEN MOTH OF THE FORGOTTEN WEB</h1>
+            </div>
+            
+            <div class="scrolling-text">
+                <div class="scrolling-text-content">
+                    Welcome, seeker of forgotten digital knowledge. The Silken Moth watches as you traverse the ruins of ancient forums. What secrets will you uncover in these hallowed archives?
+                </div>
+            </div>
+            
+            <div class="blog-entry">
+                <div class="blog-entry-header">The Weaving Begins</div>
+                <div class="blog-entry-date">Last updated: 03.05.2025 - 11:37 PM</div>
+                <div class="blog-entry-content">
+                    <p>Welcome to this shrine to the forgotten web. I am Lyrrith, curator of digital fragments, keeper of lost HTML. My silken threads connect what once was to what remains.</p>
+                    
+                    <p>Long have I wandered through abandoned domains, collecting pieces of web history before they vanish into the void. Each pixel GIF, each table layout, each MIDI file echoes with the voices of those who built the early digital realms.</p>
+                    
+                    <p>In these pages, you will find artifacts salvaged from the darkest corners of expired domains. Fragments of communities long dispersed. Echoes of conversations from forums that no longer load.</p>
+                    
+                    <p>The modern web grows ever more centralized, homogenized. But here, we remember the chaotic beauty of personal expression that once flourished. The amateur webmasters who built digital gardens with their own hands.</p>
+                </div>
+            </div>
+            
+            <div class="blog-entry">
+                <div class="blog-entry-header">Whispers from the Archive</div>
+                <div class="blog-entry-date">03.01.2025 - 02:22 AM</div>
+                <div class="blog-entry-content">
+                    <p>Today I recovered fragments from a long-forgotten BBS that existed between 1994-1998. The server had been disconnected decades ago, but echoes remained in an old backup on a dusty ZIP disk.</p>
+                    
+                    <p>Among the fragments was a discussion about the future of the internet. How strange to read their predictions, their hopes, their fears. They spoke of information highways and cyberpunk dreams, not knowing how commerce would come to dominate the digital landscape.</p>
+                    
+                    <p>One user, known only as [moth_watcher], had written extensively about hidden protocols and mysterious sub-networks that existed between the visible pages. Were these mere fabrications, or did they glimpse something real that has since been forgotten?</p>
+                    
+                    <p>I've added their writings to the Silken Archives. Some patterns only become visible when viewed from a distance of years.</p>
+                </div>
+            </div>
+            
+            <div class="blog-entry">
+                <div class="blog-entry-header">The Temple of Source</div>
+                <div class="blog-entry-date">02.14.2025 - 10:13 PM</div>
+                <div class="blog-entry-content">
+                    <p>The ancient ones built with simple tools. Raw HTML, inline styles, table layouts that defied logic yet somehow worked. Their creations were not perfect, but they were authentic.</p>
+                    
+                    <p>I've been reconstructing a personal homepage from 1997, dedicated to an obscure Japanese animation. The author had created dozens of intricate layouts, all handcrafted with care that modern frameworks cannot replicate.</p>
+                    
+                    <p>Each <font> tag, each nested table, each carefully positioned GIF tells a story of patience and dedication. They built not for algorithms or metrics, but for the joy of creation itself.</p>
+                    
+                    <p>The modern web has forgotten this intimacy between creator and code. In these digital temples, we can still feel the presence of those who shaped bits and bytes with their own hands, leaving traces of themselves in every tag.</p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                © 2025 LYRRITH • The Silken Moth Archives • No Rights Reserved • Information Wants To Be Free
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pixel GIF Icons -->
+    <div class="pixel-icons">
+        <div class="pixel-icon firefly floating" style="top: 120px; left: 5%;"></div>
+        <div class="pixel-icon moon spinning" style="top: 250px; right: 8%;"></div>
+        <div class="pixel-icon spellbook floating" style="bottom: 100px; left: 12%;"></div>
+        <div class="pixel-icon firefly floating" style="bottom: 180px; right: 15%;"></div>
+    </div>
+    
+    <!-- Hidden Glyphs -->
+    <div class="hidden-glyph" style="top: 180px; right: 25%;"></div>
+    <div class="hidden-glyph" style="bottom: 150px; left: 30%;"></div>
+    
+    <!-- Lost Page Modal -->
+    <div class="lost-page-modal">
+        <div class="lost-page-content">
+            <div class="lost-page-header">RECOVERED FRAGMENT - FORUM.DIGITALTEMPLE.NET (CIRCA 1998)</div>
+            <button class="lost-page-close">×</button>
+            <div class="lost-page-body">
+                <p>USER: moth_watcher<br>
+                TIMESTAMP: 07-13-1998 02:37:14</p>
+                
+                <p>I've been mapping the forgotten corners of the net for three years now. There are spaces between the known domains, invisible to search engines but still accessible if you know the right sequences.</p>
+                
+                <p>Last night I found something strange. A server that shouldn't exist, hosting what appears to be fragments of web pages from domains that have never existed in the ICANN registry.</p>
+                
+<pre>
+telnet 192.168.███.███ 9414
+> CONNECTED
+> ▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌
+> Welcome, Traveler
+> You have reached The Pattern
+> State your query
+
+query: origins
+> The Pattern existed before the Web
+> We are echoes of what once was
+> And shadows of what will be
+> Look between the pages, not at them
+</pre>
+
+                <p>I don't know if this is some elaborate art project or something else entirely. The server vanished when I tried to connect again, but I managed to save some of the text exchanges.</p>
+                
+                <p>Has anyone else encountered something similar? Are there others mapping these in-between spaces?</p>
+                
+                <hr>
+                
+                <p>USER: systemadmin<br>
+                TIMESTAMP: 07-13-1998 08:14:52</p>
+                
+                <p>moth_watcher: This thread has been locked. Please refrain from discussing unauthorized network access. As per our forum rules, sections 4.1 and 4.3, discussions of this nature are prohibited.</p>
+                
+                <p>For other users: No such networks exist. The internet is fully documented and mapped. Please report any similar posts.</p>
+            </div>
+            <div class="lost-page-footer">
+                [End of recovered fragment. Original thread was deleted but partially recovered from server cache]
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Ripple Effect
+        document.addEventListener('click', function(e) {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            document.body.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 1000);
+        });
+        
+        // Hidden Glyph Functionality
+        const hiddenGlyphs = document.querySelectorAll('.hidden-glyph');
+        const lostPageModal = document.querySelector('.lost-page-modal');
+        const lostPageClose = document.querySelector('.lost-page-close');
+        
+        hiddenGlyphs.forEach(glyph => {
+            glyph.addEventListener('click', function() {
+                lostPageModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        lostPageClose.addEventListener('click', function() {
+            lostPageModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Cursor Flicker Effect
+        function randomFlicker() {
+            const body = document.body;
+            const randomTime = Math.floor(Math.random() * 30000) + 20000; // Between 20-50 seconds
+            
+            setTimeout(() => {
+                body.style.animation = 'cursor-flicker 0.5s';
+                
+                setTimeout(() => {
+                    body.style.animation = 'none';
+                    randomFlicker();
+                }, 500);
+            }, randomTime);
+        }
+        
+        randomFlicker();
+        
+        // Floating Pixel Icons
+        function randomizeIconPositions() {
+            const icons = document.querySelectorAll('.pixel-icon');
+            
+            icons.forEach(icon => {
+                const isFloating = icon.classList.contains('floating');
+                const isSpinning = icon.classList.contains('spinning');
+                
+                // Randomly change position slightly
+                const currentTop = parseInt(icon.style.top);
+                const currentLeft = parseInt(icon.style.left);
+                const currentRight = parseInt(icon.style.right);
+                const currentBottom = parseInt(icon.style.bottom);
+                
+                const randomOffset = () => Math.floor(Math.random() * 30) - 15;
+                
+                if (!isNaN(currentTop)) icon.style.top = (currentTop + randomOffset()) + 'px';
+                if (!isNaN(currentLeft)) icon.style.left = (currentLeft + randomOffset()) + 'px';
+                if (!isNaN(currentRight)) icon.style.right = (currentRight + randomOffset()) + 'px';
+                if (!isNaN(currentBottom)) icon.style.bottom = (currentBottom + randomOffset()) + 'px';
+                
+                // Randomly add or remove floating/spinning classes
+                if (Math.random() > 0.7) {
+                    if (isFloating) {
+                        icon.classList.remove('floating');
+                        icon.classList.add('spinning');
+                    } else if (isSpinning) {
+                        icon.classList.remove('spinning');
+                        icon.classList.add('floating');
+                    }
+                }
+            });
+            
+            setTimeout(randomizeIconPositions, 60000); // Every minute
+        }
+        
+        setTimeout(randomizeIconPositions, 60000);
+        
+        // Counter Animation
+        function animateCounter() {
+            const counterDigits = document.querySelectorAll('.counter-digits');
+            
+            counterDigits.forEach(digit => {
+                const currentValue = parseInt(digit.textContent);
+                const newValue = Math.floor(Math.random() * 10);
+                
+                if (Math.random() > 0.8) {
+                    digit.textContent = newValue;
+                    
+                    setTimeout(() => {
+                        digit.textContent = currentValue;
+                    }, 500);
+                }
+            });
+            
+            setTimeout(animateCounter, 8000); // Every 8 seconds
+        }
+        
+        setTimeout(animateCounter, 8000);
+    </script>
+</body>
+</html>
